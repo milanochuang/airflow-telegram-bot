@@ -125,5 +125,10 @@
  .dmypy.json
  dmypy.json
 
+ # Airflow
+logs
+airflow.db
+unittests.cfg
+
  # Pyre type checker
  .pyre/
