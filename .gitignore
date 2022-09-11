@@ -129,6 +129,8 @@
 logs
 airflow.db
 unittests.cfg
+airflow.cfg
+webserver_config.py
 
  # Pyre type checker
  .pyre/
