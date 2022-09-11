@@ -31,6 +31,7 @@ def search_for_video(inputSTR):
                 "url": "https://pttplay.cc{}".format(re.match(regex, string).group(1))
                 }
             resultLIST.append(resultDICT)
+    # print(resultLIST)
     return resultLIST
 
 def find_video_url(inputURL):
@@ -53,3 +54,4 @@ def find_video_url(inputURL):
     return resultLIST
 
 if __name__== "__main__":
+    search_for_video("海賊王")
