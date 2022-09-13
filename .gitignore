@@ -134,6 +134,7 @@ airflow.cfg
 webserver_config.py
 airflow-webserver.pid
 keynote.txt
+.DS_Store
 
  # Pyre type checker
  .pyre/
