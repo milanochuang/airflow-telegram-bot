@@ -1,3 +1,4 @@
+from curses import meta
 from datetime import timedelta, datetime
 import time
 import json
@@ -84,8 +85,8 @@ def find_video_url(inputURL):
 
 def process_metadata(mode, **context):
 
-    file_dir = os.path.dirname(__file__)
-    metadata_path = os.path.join(file_dir, '../data/tv-series.json')
+    file_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    metadata_path = file_dir+'/data/tv-series.json'
     if mode == 'read':
         with open(metadata_path, 'r') as fp:
             metadata = json.load(fp)
@@ -137,8 +138,8 @@ def decide_what_to_do(**context):
         return 'no_do_nothing'
 
 def get_token():
-    file_dir = os.path.dirname(__file__)
-    token_path = os.path.join(file_dir, '../data/credentials/telegram.json')
+    file_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    token_path = file_dir+'/data/credentials/telegram.json'
     with open(token_path, 'r') as fp:
         token = json.load(fp)['api_key']
         return token
@@ -156,14 +157,14 @@ def generate_message(**context):
             message += '{} 最新一集： {} 話（上次看到：{} 集）\n'.format(name, latest, prev)
             message += url + '\n\n'
 
-    file_dir = os.path.dirname(__file__)
-    message_path = os.path.join(file_dir, '../data/message.txt')
+    file_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    message_path = file_dir+'/data/message.txt'
     with open(message_path, 'w') as fp:
         fp.write(message)
 
 def get_message_text():
-    file_dir = os.path.dirname(__file__)
-    message_path = os.path.join(file_dir, '../data/message.txt')
+    file_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+    message_path = file_dir+'/data/message.txt'
     with open(message_path, 'r') as fp:
         message = fp.read()
 
@@ -219,3 +220,8 @@ with DAG('telegram_bot', default_args=default_args) as dag:
     decide_what_to_do >> generate_notification
     decide_what_to_do >> do_nothing
     generate_notification >> send_notification >> update_read_history
+
+# if __name__ == "__main__":
+#     file_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+#     metadata_path = file_dir+'/data/tv-series.json'
+#     print(metadata_path)
