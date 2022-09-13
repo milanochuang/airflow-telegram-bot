@@ -1,5 +1,6 @@
 # Byte-compiled / optimized / DLL files
  __pycache__/
+ dags/__pycache__/
  *.py[cod]
  *$py.class
 
@@ -131,6 +132,8 @@ airflow.db
 unittests.cfg
 airflow.cfg
 webserver_config.py
+airflow-webserver.pid
+keynote.txt
 
  # Pyre type checker
  .pyre/
