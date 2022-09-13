@@ -51,7 +51,7 @@ def find_video_url(inputURL):
             "url": "https://pttplay.cc{}".format(i['href'])
         }
         resultLIST.append(resultDICT)
-    return resultLIST
+    return resultLIST[-1]
 
 if __name__== "__main__":
     search_for_video("海賊王")
