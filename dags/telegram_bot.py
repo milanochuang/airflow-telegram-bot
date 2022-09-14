@@ -117,27 +117,27 @@ def check_series_info(**context):
         return:
         {'217320': {'title': '魔戒：力量之戒第一季', 'episode': 3, 'url': 'https://pttplay.cc/v/217320-2-3.html'}}
         """
-        print(1)
-        r = requests.get(menu_url)
-        print(2)
-        resultLIST = []
-        page = BeautifulSoup(r.text, "html.parser")
-        print(page)
-        title = page.find("div", {"id": "zanpian-score"}).find("h1").text
-        url = page.find("ul", {"id": "con_playlist_2"}).find_all("a", href=True)
-        print("I am after crawler")
-        regex = "https://pttplay\.cc/vod/(\d+)\.html"
-        seriesID = re.match(regex, menu_url).group(1)
-        for i in url:
-            resultDICT = {
-                seriesID:
-                {
-                    "title": title,
-                    "episode": int(i.text),
-                    "url": "https://pttplay.cc{}".format(i['href'])
-                }
-            }
-            resultLIST.append(resultDICT)
+        # print(1)
+        # r = requests.get(menu_url)
+        # print(2)
+        # resultLIST = []
+        # page = BeautifulSoup(r.text, "html.parser")
+        # print(page)
+        # title = page.find("div", {"id": "zanpian-score"}).find("h1").text
+        # url = page.find("ul", {"id": "con_playlist_2"}).find_all("a", href=True)
+        # print("I am after crawler")
+        # regex = "https://pttplay\.cc/vod/(\d+)\.html"
+        # seriesID = re.match(regex, menu_url).group(1)
+        # for i in url:
+        #     resultDICT = {
+        #         seriesID:
+        #         {
+        #             "title": title,
+        #             "episode": int(i.text),
+        #             "url": "https://pttplay.cc{}".format(i['href'])
+        #         }
+        #     }
+        #     resultLIST.append(resultDICT)
         seriesLIST = find_video_url(menu_url)
         series_name = seriesLIST[-1][series_id]['title']
         latest_episode_num = seriesLIST[-1][series_id]['episode']
@@ -249,7 +249,5 @@ with DAG('telegram_bot', default_args=default_args) as dag:
     decide_what_to_do >> do_nothing
     generate_notification >> send_notification >> update_read_history
 
-# if __name__ == "__main__":
-#     file_dir = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-#     metadata_path = file_dir+'/data/tv-series.json'
-#     print(metadata_path)
+if __name__ == "__main__":
+    print(find_video_url("https://pttplay.cc/vod/217320.html"))
