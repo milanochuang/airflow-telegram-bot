@@ -16,7 +16,7 @@ import re
 
 default_args = {
     'owner': 'Milan',
-    'start_date': datetime(2100,1,1,0,0),
+    'start_date': datetime(2022,9,1,0,0),
     'schedule_interval': '@daily',
     'retries': 2,
     'retry_delay': timedelta(minutes=1)
@@ -73,7 +73,8 @@ def find_video_url(inputURL):
     regex = "https://pttplay\.cc/vod/(\d+)\.html"
     seriesID = re.match(regex, inputURL).group(1)
     for i in url:
-        resultDICT = {seriesID:
+        resultDICT = {
+            seriesID:
             {
                 "title": title,
                 "episode": int(i.text),
@@ -107,9 +108,36 @@ def check_series_info(**context):
     metadata = context['task_instance'].xcom_pull(task_ids='get_read_history')
     all_series_info = metadata
     anything_new = False
+    # print(metadata)
+    # print("I am after anything new")
     for series_id, series_info in dict(all_series_info).items():
         # 找最新一集的集數
         menu_url = "https://pttplay.cc/vod/{}.html".format(series_id)
+        """
+        return:
+        {'217320': {'title': '魔戒：力量之戒第一季', 'episode': 3, 'url': 'https://pttplay.cc/v/217320-2-3.html'}}
+        """
+        print(1)
+        r = requests.get(menu_url)
+        print(2)
+        resultLIST = []
+        page = BeautifulSoup(r.text, "html.parser")
+        print(page)
+        title = page.find("div", {"id": "zanpian-score"}).find("h1").text
+        url = page.find("ul", {"id": "con_playlist_2"}).find_all("a", href=True)
+        print("I am after crawler")
+        regex = "https://pttplay\.cc/vod/(\d+)\.html"
+        seriesID = re.match(regex, menu_url).group(1)
+        for i in url:
+            resultDICT = {
+                seriesID:
+                {
+                    "title": title,
+                    "episode": int(i.text),
+                    "url": "https://pttplay.cc{}".format(i['href'])
+                }
+            }
+            resultLIST.append(resultDICT)
         seriesLIST = find_video_url(menu_url)
         series_name = seriesLIST[-1][series_id]['title']
         latest_episode_num = seriesLIST[-1][series_id]['episode']
